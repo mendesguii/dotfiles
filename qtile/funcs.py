@@ -60,9 +60,12 @@ def memory():
     return memory
 
 def weather():
-    icons = { "Clouds":"",
+    icons = {
+            "Clouds":"",
             "Thunderstorm":"",
-            "Rain":""}
+            "Rain":"",
+            "Clear":""
+            }
     key = "d9864cd8a902b4e6857d22ce296229f5"
     url = "http://api.openweathermap.org/data/2.5/weather?q=Rio Bonito&units=metric&appid="+key
     try:

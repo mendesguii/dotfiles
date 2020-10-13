@@ -290,10 +290,29 @@ screens = [
                        charge_char = " ",
                        discharge_char = " "
                        ),
-              widget.Systray(
-                       background = colors[4],
-                       padding = 5
-                       ),
+            widget.TextBox(
+                        text='',
+                        background = colors[4],
+                        foreground = colors[5],
+                        padding=-6.5,
+                        fontsize=40
+                        ),
+                widget.TextBox(
+                        text='',
+                        background = colors[5],
+                        foreground = colors[2],
+                        fontsize=11,
+                        mouse_callbacks = {'Button1': lambda qtile: qtile.cmd_spawn('systemctl poweroff')}
+                        ),
+             widget.Sep(
+                        linewidth = 0,
+                        padding = 5,
+                        foreground = colors[2],
+                        background = colors[5]
+                        ),
+             widget.Systray(
+                        background = colors[5]
+                     ),
                           ],
             24,
         ),
