@@ -83,6 +83,8 @@ def weather():
 def wallrandom():
    path = "/home/hxn/Wallpapers/"
    allWall =(os.listdir(path))
-   postion = random.randint(0,len(allWall))
-   print(path+allWall[postion])
-   return path+allWall[postion]
+   if len(allWall) == 1:
+       position = 0
+   else:
+       position = random.randint(0,len(allWall))
+   return path+allWall[position]
