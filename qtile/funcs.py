@@ -64,7 +64,9 @@ def weather():
             "Clouds":"",
             "Thunderstorm":"",
             "Rain":"",
-            "Clear":""
+            "Clear":"",
+            "Mist":"敖",
+            "Drizzle":"殺"
             }
     key = "d9864cd8a902b4e6857d22ce296229f5"
     url = "http://api.openweathermap.org/data/2.5/weather?q=Rio Bonito&units=metric&appid="+key
@@ -88,3 +90,15 @@ def wallrandom():
    else:
        position = random.randint(0,len(allWall))
    return path+allWall[position]
+
+def setMonitors():
+    monitor = runCommand("xrandr --current | grep HDMI-2")
+    try:
+        if "disconnected" not in monitor:
+            runCommand('xrandr --output LVDS-1 --primary --mode 1366x768')
+            runCommand("xrandr --newmode "+'"2560x1080"'+" 188.60  2560 2704 2976 3392  1080 1081 1084 1112  -HSync +Vsync")
+            runCommand('xrandr --addmode HDMI-2 '+ '"2560x1080"' )
+            runCommand('xrandr --output HDMI-2 --mode '+'"2560x1080"'+ " --left-of LVDS-1")
+    except:
+            runCommand('xrandr --output LVDS-1 --primary --mode 1366x768')
+            print("No Monitors connected")

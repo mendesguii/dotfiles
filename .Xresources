@@ -10,8 +10,8 @@ URxvt.scrollBar: false
 URxvt.cursorColor: white
 
 URxvt*depth: 32
-URxvt*transparent: true
-URxvt*shading: 10
+!URxvt*transparent: true
+!URxvt*shading: 10
 
 ! special
 URxvt*.foreground:   #ffffff

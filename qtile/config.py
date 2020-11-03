@@ -5,16 +5,19 @@ from libqtile import bar, layout, widget
 from libqtile.config import Click, Drag, Group, Key, Screen
 from libqtile.lazy import lazy
 
+#Setting Monitors
+funcs.setMonitors()
+
 colors = [["#1F1F1F", "#1F1F1F"], # panel background
           ["#6F6F6F", "#6F6F6F"], # background for current screen tab
           ["#ffffff", "#ffffff"], # font color for group names
           ["#FF0038", "#FF0038"], # border line color for current tab
           ["#4A4B4B", "#4A4B4B"],
           ["#6F6F6F","#6F6F6F"],
-          ["#FF0038", "#FF0038"]] 
+          ["#FF0038", "#FF0038"]]
 
 mod = "mod4"
-terminal ="urxvt" 
+terminal ="urxvt"
 
 keys = [
      Key(
@@ -40,7 +43,10 @@ keys = [
         desc="Move focus up in stack pane"),
     Key([mod], "f", lazy.window.toggle_fullscreen(),
         desc="Goes full screen"),
-
+    Key([mod], "period",lazy.next_screen(),
+        desc='Move focus to next monitor'),
+    Key([mod], "comma",lazy.prev_screen(),
+        desc='Move focus to prev monitor'),
 
     # Move windows up or down in current stack
     Key([mod, "shift"], "k", lazy.layout.shuffle_down(),
@@ -108,215 +114,236 @@ widget_defaults = dict(
 )
 extension_defaults = widget_defaults.copy()
 
+def genWidgetList():
+    return [
+   widget.Sep(
+           linewidth = 0,
+           padding = 6,
+           foreground = colors[2],
+           background = colors[0]
+           ),
+  widget.GroupBox(
+           font = "Fira Code Nerd Font",
+           fontsize = 11,
+           margin_y = 3,
+           margin_x = 0,
+           padding_y = 5,
+           padding_x = 3,
+           borderwidth = 3,
+           active = colors[2],
+           inactive = colors[2],
+           rounded = False,
+           highlight_color = colors[1],
+           highlight_method = "line",
+           this_current_screen_border = colors[3],
+           this_screen_border = colors [4],
+           other_current_screen_border = colors[0],
+           other_screen_border = colors[0],
+           foreground = colors[2],
+           background = colors[0]
+           ),
+  widget.Prompt(
+           font = "Ubuntu Mono",
+           padding = 10,
+           foreground = colors[3],
+           background = colors[1]
+           ),
+  widget.Sep(
+           linewidth = 0,
+           padding = 10,
+           foreground = colors[2],
+           background = colors[0]
+           ),
+widget.WindowName(
+           foreground = colors[6],
+           background = colors[0],
+           padding = 0
+           ),
+ widget.Sep(
+            linewidth = 0,
+            padding = 5,
+            foreground = colors[2],
+            background = colors[0]
+            ),
+widget.TextBox(
+            text='',
+            background = colors[0],
+            foreground = colors[4],
+            padding=-6.5,
+            fontsize=40
+            ),
+ widget.GenPollText( #Weather
+           foreground = colors[2],
+           background = colors[4],
+           update_interval = 350,
+           func=funcs.weather
+            ),
+  widget.TextBox(
+            text='',
+            background = colors[4],
+            foreground = colors[5],
+            padding=-6.5,
+            fontsize=40
+            ),
+  widget.GenPollText( #Memory
+           foreground = colors[2],
+           background = colors[5],
+           update_interval = 4,
+           func=funcs.memory
+           ),
+   widget.Sep(
+            linewidth = 0,
+            padding = 5,
+            foreground = colors[2],
+            background = colors[5]
+            ),
+   widget.TextBox(
+            text='',
+            background = colors[5],
+            foreground = colors[4],
+            padding=-6.5,
+            fontsize=40
+            ),
+   widget.GenPollText( #Internet
+           foreground = colors[2],
+           background = colors[4],
+           update_interval = 2,
+           func=funcs.internet,
+           mouse_callbacks = {'Button1': lambda qtile: qtile.cmd_spawn('urxvt')}
+            ),
+   widget.Sep(
+            linewidth = 0,
+            padding = 5,
+            foreground = colors[4],
+            background = colors[4]
+            ),
+   widget.TextBox(
+            text='',
+            background = colors[4],
+            foreground = colors[5],
+            padding=-6.5,
+            fontsize=40
+            ),
+   widget.TextBox(
+            text=' ',
+            background = colors[5],
+            foreground = colors[2],
+            fontsize=14
+            ),
+  widget.Volume(
+           foreground = colors[2],
+           background = colors[5],
+           padding = 5
+           ),
+   widget.Sep(
+            linewidth = 0,
+            padding = 5,
+            foreground = colors[2],
+            background = colors[5]
+            ),
+   widget.TextBox(
+            text='',
+            background = colors[5],
+            foreground = colors[4],
+            padding=-6.5,
+            fontsize=40
+            ),
+  widget.CurrentLayout(
+           foreground = colors[2],
+           background = colors[4],
+           padding = 5
+           ),
+  widget.Sep(
+            linewidth = 0,
+            padding = 5,
+            foreground = colors[4],
+            background = colors[4]
+            ),
+   widget.TextBox(
+            text='',
+            background = colors[4],
+            foreground = colors[5],
+            padding=-6.5,
+            fontsize=40
+            ),
+  widget.Clock(
+           foreground = colors[2],
+           background = colors[5],
+           format = "  %a, %d/%m [%H:%M]"
+           ),
+    widget.Sep(
+            linewidth = 0,
+            padding = 5,
+            foreground = colors[2],
+            background = colors[5]
+            ),
+   widget.TextBox(
+            text='',
+            background = colors[5],
+            foreground = colors[4],
+            padding=-6.5,
+            fontsize=40
+            ),
+   widget.KeyboardLayout(
+           foreground = colors[2],
+           background = colors[4],
+           configured_keyboards = ["pt","br"]),
+   widget.Sep(
+            linewidth = 0,
+            padding = 5,
+            foreground = colors[4],
+            background = colors[4]
+            ),
+   widget.TextBox(
+            text='',
+            background = colors[4],
+            foreground = colors[5],
+            padding=-6.5,
+            fontsize=40
+            ),
+  widget.Battery(
+           foreground = colors[2],
+           background = colors[5],
+           battery = 0,
+           format = '{char} {percent:1.0%} ({hour:d}:{min:02d})',
+           charge_char = " ",
+           discharge_char = " "
+           ),
+widget.TextBox(
+            text='',
+            background = colors[5],
+            foreground = colors[4],
+            padding=-6.5,
+            fontsize=40
+            ),
+    widget.TextBox(
+            text='',
+            background = colors[4],
+            foreground = colors[2],
+            fontsize=11,
+            mouse_callbacks = {'Button1': lambda qtile: qtile.cmd_spawn('systemctl poweroff')}
+            ),
+ widget.Sep(
+            linewidth = 0,
+            padding = 5,
+            foreground = colors[2],
+            background = colors[4]
+            ),
+ widget.Systray(
+            background = colors[5]
+         ),
+              ]
+
+
 screens = [
     Screen(
         wallpaper=funcs.wallrandom(),
         wallpaper_mode = "fill",
         top=bar.Bar(
-            [
-               widget.Sep(
-                       linewidth = 0,
-                       padding = 6,
-                       foreground = colors[2],
-                       background = colors[0]
-                       ),
-              widget.GroupBox(
-                       font = "Fira Code Nerd Font",
-                       fontsize = 11,
-                       margin_y = 3,
-                       margin_x = 0,
-                       padding_y = 5,
-                       padding_x = 3,
-                       borderwidth = 3,
-                       active = colors[2],
-                       inactive = colors[2],
-                       rounded = False,
-                       highlight_color = colors[1],
-                       highlight_method = "line",
-                       this_current_screen_border = colors[3],
-                       this_screen_border = colors [4],
-                       other_current_screen_border = colors[0],
-                       other_screen_border = colors[0],
-                       foreground = colors[2],
-                       background = colors[0]
-                       ),
-              widget.Prompt(
-                       font = "Ubuntu Mono",
-                       padding = 10,
-                       foreground = colors[3],
-                       background = colors[1]
-                       ),
-              widget.Sep(
-                       linewidth = 0,
-                       padding = 10,
-                       foreground = colors[2],
-                       background = colors[0]
-                       ),
-          widget.WindowName(
-                       foreground = colors[6],
-                       background = colors[0],
-                       padding = 0
-                       ),
-             widget.Sep(
-                        linewidth = 0,
-                        padding = 5,
-                        foreground = colors[2],
-                        background = colors[0]
-                        ),
-           widget.TextBox(
-                        text='',
-                        background = colors[0],
-                        foreground = colors[4],
-                        padding=-6.5,
-                        fontsize=40
-                        ),
-             widget.GenPollText( #Weather
-                       foreground = colors[2],
-                       background = colors[4],
-                       update_interval = 350,
-                       func=funcs.weather
-                        ),
-              widget.TextBox(
-                        text='',
-                        background = colors[4],
-                        foreground = colors[5],
-                        padding=-6.5,
-                        fontsize=40
-                        ),
-              widget.GenPollText( #Memory
-                       foreground = colors[2],
-                       background = colors[5],
-                       update_interval = 4,
-                       func=funcs.memory
-                       ),
-               widget.Sep(
-                        linewidth = 0,
-                        padding = 5,
-                        foreground = colors[2],
-                        background = colors[5]
-                        ),
-               widget.TextBox(
-                        text='',
-                        background = colors[5],
-                        foreground = colors[4],
-                        padding=-6.5,
-                        fontsize=40
-                        ),
-               widget.GenPollText( #Internet
-                       foreground = colors[2],
-                       background = colors[4],
-                       update_interval = 2,
-                       func=funcs.internet,
-                       mouse_callbacks = {'Button1': lambda qtile: qtile.cmd_spawn('urxvt')}
-                        ),
-               widget.Sep(
-                        linewidth = 0,
-                        padding = 5,
-                        foreground = colors[4],
-                        background = colors[4]
-                        ),
-               widget.TextBox(
-                        text='',
-                        background = colors[4],
-                        foreground = colors[5],
-                        padding=-6.5,
-                        fontsize=40
-                        ),
-               widget.TextBox(
-                        text=' ',
-                        background = colors[5],
-                        foreground = colors[2],
-                        fontsize=14
-                        ),
-              widget.Volume(
-                       foreground = colors[2],
-                       background = colors[5],
-                       padding = 5
-                       ),
-               widget.Sep(
-                        linewidth = 0,
-                        padding = 5,
-                        foreground = colors[2],
-                        background = colors[5]
-                        ),
-               widget.TextBox(
-                        text='',
-                        background = colors[5],
-                        foreground = colors[4],
-                        padding=-6.5,
-                        fontsize=40
-                        ),
-              widget.CurrentLayout(
-                       foreground = colors[2],
-                       background = colors[4],
-                       padding = 5
-                       ),
-              widget.Sep(
-                        linewidth = 0,
-                        padding = 5,
-                        foreground = colors[4],
-                        background = colors[4]
-                        ),
-               widget.TextBox(
-                        text='',
-                        background = colors[4],
-                        foreground = colors[5],
-                        padding=-6.5,
-                        fontsize=40
-                        ),
-              widget.Clock(
-                       foreground = colors[2],
-                       background = colors[5],
-                       format = "  %a, %d/%m [%H:%M]"
-                       ),
-                widget.Sep(
-                        linewidth = 0,
-                        padding = 5,
-                        foreground = colors[2],
-                        background = colors[5]
-                        ),
-               widget.TextBox(
-                        text='',
-                        background = colors[5],
-                        foreground = colors[4],
-                        padding=-6.5,
-                        fontsize=40
-                        ),
-              widget.Battery(
-                       foreground = colors[2],
-                       background = colors[4],
-                       battery = 0,
-                       format = '{char} {percent:1.0%} ({hour:d}:{min:02d})',
-                       charge_char = " ",
-                       discharge_char = " "
-                       ),
-            widget.TextBox(
-                        text='',
-                        background = colors[4],
-                        foreground = colors[5],
-                        padding=-6.5,
-                        fontsize=40
-                        ),
-                widget.TextBox(
-                        text='',
-                        background = colors[5],
-                        foreground = colors[2],
-                        fontsize=11,
-                        mouse_callbacks = {'Button1': lambda qtile: qtile.cmd_spawn('systemctl poweroff')}
-                        ),
-             widget.Sep(
-                        linewidth = 0,
-                        padding = 5,
-                        foreground = colors[2],
-                        background = colors[5]
-                        ),
-             widget.Systray(
-                        background = colors[5]
-                     ),
-                          ],
+            genWidgetList(),
             24,
         ),
-    ),
+    )
 ]
 
 # Drag floating layouts.
